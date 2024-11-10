@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_nagyHazi: phony || .
 
 build CMakeFiles/nagyHazi.dir/main.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Users/radacsenge/Desktop/BME/Prog1/Nagy$ Házi/nagyHazi/main.c || cmake_object_order_depends_target_nagyHazi
   DEP_FILE = CMakeFiles/nagyHazi.dir/main.c.o.d
-  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics
+  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics -Wall -Werror
   OBJECT_DIR = CMakeFiles/nagyHazi.dir
   OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
 

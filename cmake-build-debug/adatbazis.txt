@@ -1,0 +1,8 @@
+---------------------------------
+1. esemény: 
+Esemény neve: l
+Esemény dátuma: 2021.1.1.
+Esemény időpontja: 11:11
+Esemény helyszíne: j
+Esémenyhez tartozó megjegyzés: j
+---------------------------------
