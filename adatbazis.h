@@ -1,13 +1,12 @@
 #ifndef ADATBAZIS_H
 #define ADATBAZIS_H
+#include <stdbool.h>
 
-#include "Esemeny.h"
-
-typedef struct Adatbazis {
-    Esemeny *esemenyek;
-    int meret;
-} Adatbazis;
-
+#include "strukturak.h"
+#include "seged.h"
+#include "esemeny_kezelo.h"
+#include "datum.h"
+#include "ido.h"
 
 void adatbazis_kilistazasa(const Adatbazis *adatbazis);
 void adatbazis_felszabaditasa(Adatbazis *adatbazis);

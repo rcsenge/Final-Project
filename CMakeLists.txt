@@ -9,5 +9,15 @@ add_executable(nagyHazi main.c debugmalloc.h
         esemeny.h
         adatbazis.h
         seged.h
-        esemeny_kezelo.h)
+        esemeny_kezelo.h
+        adatbazis.h
+        datum.c
+        esemeny.c
+        esemeny_kezelo.c
+        ido.c
+        seged.c
+        adatbazis.c
+        strukturak.h
+        debugmalloc.h
+)
 target_compile_options(nagyHazi PUBLIC -Wall -Werror)

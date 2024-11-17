@@ -1,17 +1,9 @@
 #ifndef ESEMENY_H
 #define ESEMENY_H
-#include <stdbool.h>
 
-#include "Datum.h"
-#include "Ido.h"
+#include "strukturak.h"
+#include "esemeny_kezelo.h"
 
-typedef struct Esemeny {
-    char *nev;
-    Datum datum;
-    Ido ido;
-    char *hely;
-    char *megjegyzes;
-} Esemeny;
 
 void rekord_hozzaadasa(Adatbazis *adatbazis);
 void rekord_torlese(Adatbazis *adatbazis);
@@ -23,3 +15,4 @@ void uj_hely(Esemeny *esemeny);
 void uj_megjegyzes(Esemeny *esemeny);
 
 #endif
+

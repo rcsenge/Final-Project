@@ -1,6 +1,9 @@
 #ifndef SEGED_H
 #define SEGED_H
 #include <stdbool.h>
+#include "strukturak.h"
+#include "adatbazis.h"
+
 
 bool egyezo_esemenyek(const Esemeny *esemeny1, const Esemeny *esemeny2);
 

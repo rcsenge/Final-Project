@@ -1,9 +1,8 @@
 #ifndef DATUM_H
 #define DATUM_H
-
-typedef struct Datum {
-    int ev, ho, nap;
-} Datum;
+#define DATUMHOSSZ 13
+#include <stdbool.h>
+#include "strukturak.h"
 
 bool datum_ellenorzo(char datum[]);
 

@@ -1,0 +1,3 @@
+/Users/radacsenge/Desktop/BME/Prog1/Nagy Házi/nagyHazi/CMakeFiles/nagyHazi.dir
+/Users/radacsenge/Desktop/BME/Prog1/Nagy Házi/nagyHazi/CMakeFiles/edit_cache.dir
+/Users/radacsenge/Desktop/BME/Prog1/Nagy Házi/nagyHazi/CMakeFiles/rebuild_cache.dir

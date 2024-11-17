@@ -1,9 +1,8 @@
 #ifndef IDO_H
 #define IDO_H
-
-typedef struct Ido {
-    int ora, perc;
-} Ido;
+#define IDOHOSSZ 5
+#include <stdbool.h>
+#include "seged.h"
 
 bool ido_ellenorzo(char ido[]);
 
