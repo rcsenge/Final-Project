@@ -55,6 +55,42 @@ build CMakeFiles/nagyHazi.dir/main.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Us
   OBJECT_DIR = CMakeFiles/nagyHazi.dir
   OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
 
+build CMakeFiles/nagyHazi.dir/datum.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Users/radacsenge/Desktop/BME/Prog1/Nagy$ Házi/nagyHazi/datum.c || cmake_object_order_depends_target_nagyHazi
+  DEP_FILE = CMakeFiles/nagyHazi.dir/datum.c.o.d
+  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics -Wall -Werror
+  OBJECT_DIR = CMakeFiles/nagyHazi.dir
+  OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
+
+build CMakeFiles/nagyHazi.dir/esemeny.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Users/radacsenge/Desktop/BME/Prog1/Nagy$ Házi/nagyHazi/esemeny.c || cmake_object_order_depends_target_nagyHazi
+  DEP_FILE = CMakeFiles/nagyHazi.dir/esemeny.c.o.d
+  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics -Wall -Werror
+  OBJECT_DIR = CMakeFiles/nagyHazi.dir
+  OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
+
+build CMakeFiles/nagyHazi.dir/esemeny_kezelo.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Users/radacsenge/Desktop/BME/Prog1/Nagy$ Házi/nagyHazi/esemeny_kezelo.c || cmake_object_order_depends_target_nagyHazi
+  DEP_FILE = CMakeFiles/nagyHazi.dir/esemeny_kezelo.c.o.d
+  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics -Wall -Werror
+  OBJECT_DIR = CMakeFiles/nagyHazi.dir
+  OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
+
+build CMakeFiles/nagyHazi.dir/ido.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Users/radacsenge/Desktop/BME/Prog1/Nagy$ Házi/nagyHazi/ido.c || cmake_object_order_depends_target_nagyHazi
+  DEP_FILE = CMakeFiles/nagyHazi.dir/ido.c.o.d
+  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics -Wall -Werror
+  OBJECT_DIR = CMakeFiles/nagyHazi.dir
+  OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
+
+build CMakeFiles/nagyHazi.dir/seged.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Users/radacsenge/Desktop/BME/Prog1/Nagy$ Házi/nagyHazi/seged.c || cmake_object_order_depends_target_nagyHazi
+  DEP_FILE = CMakeFiles/nagyHazi.dir/seged.c.o.d
+  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics -Wall -Werror
+  OBJECT_DIR = CMakeFiles/nagyHazi.dir
+  OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
+
+build CMakeFiles/nagyHazi.dir/adatbazis.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Users/radacsenge/Desktop/BME/Prog1/Nagy$ Házi/nagyHazi/adatbazis.c || cmake_object_order_depends_target_nagyHazi
+  DEP_FILE = CMakeFiles/nagyHazi.dir/adatbazis.c.o.d
+  FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7 -fcolor-diagnostics -Wall -Werror
+  OBJECT_DIR = CMakeFiles/nagyHazi.dir
+  OBJECT_FILE_DIR = CMakeFiles/nagyHazi.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target nagyHazi
@@ -63,7 +99,7 @@ build CMakeFiles/nagyHazi.dir/main.c.o: C_COMPILER__nagyHazi_unscanned_Debug /Us
 #############################################
 # Link the executable nagyHazi
 
-build nagyHazi: C_EXECUTABLE_LINKER__nagyHazi_Debug CMakeFiles/nagyHazi.dir/main.c.o
+build nagyHazi: C_EXECUTABLE_LINKER__nagyHazi_Debug CMakeFiles/nagyHazi.dir/main.c.o CMakeFiles/nagyHazi.dir/datum.c.o CMakeFiles/nagyHazi.dir/esemeny.c.o CMakeFiles/nagyHazi.dir/esemeny_kezelo.c.o CMakeFiles/nagyHazi.dir/ido.c.o CMakeFiles/nagyHazi.dir/seged.c.o CMakeFiles/nagyHazi.dir/adatbazis.c.o
   FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.7
   OBJECT_DIR = CMakeFiles/nagyHazi.dir
   POST_BUILD = :
