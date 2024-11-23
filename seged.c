@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include "datum.h"
-#include "debugmalloc.h"
 
 /**
 * Egy tomb resztombjet masolja at egy celtombbe
@@ -16,7 +15,7 @@
  */
 void substring(char eredeti[], char *cel, int kezdo, int veg) {
     if (kezdo > veg || kezdo < 0 || veg >= strlen(eredeti)) {
-        printf("Helytelen bemenetek!");
+        printf("Helytelen bemenetek!\n");
     }
 
     int cel_hossz = veg - kezdo + 1;
@@ -44,7 +43,7 @@ bool egyezo_esemenyek(const Esemeny *esemeny1, const Esemeny *esemeny2) {
         && (esemeny1->ido.ora == esemeny2->ido.ora)
         && (esemeny1->ido.perc == esemeny2->ido.perc)) {
         return true;
-        }
+    }
     return false;
 }
 
@@ -58,43 +57,36 @@ bool egyezo_esemenyek(const Esemeny *esemeny1, const Esemeny *esemeny2) {
  */
 bool rekord_keresese_idoszak_alapjan(Adatbazis adatbazis, Datum kezdo_datum, Datum veg_datum) {
     int max_talalat = 3;
-    //TODO p atnevezes
-    Esemeny *p = (Esemeny *) malloc(max_talalat * sizeof(Esemeny));
-    if (p == NULL) {
+    Esemeny *talalatok_tomb = (Esemeny *) malloc(max_talalat * sizeof(Esemeny));
+    if (talalatok_tomb == NULL) {
         printf("Hiba tortent a memoria foglalasa soran!\n");
-        free(p);
+        free(talalatok_tomb);
         return false;
     }
 
     int talalat_szam = 0;
     for (int i = 0; i < adatbazis.meret; ++i) {
-        Esemeny *p2 = NULL;
         if (datumok_osszehasonlitasa(kezdo_datum, adatbazis.esemenyek[i].datum) <= 0
             && datumok_osszehasonlitasa(veg_datum, adatbazis.esemenyek[i].datum) >= 0) {
             if (talalat_szam >= max_talalat) {
                 max_talalat *= 2;
-                p2 = realloc(p, max_talalat * sizeof(Esemeny));
+                talalatok_tomb = (Esemeny *) realloc(talalatok_tomb, max_talalat * sizeof(Esemeny));
 
-                if (p2 == NULL) {
+                if (talalatok_tomb == NULL) {
                     printf("Hiba tortent a memoria foglalasa soran!\n");
-                    free(p);
-                    free(p2);
+                    free(talalatok_tomb);
                     return false;
                 }
-                p = p2;
             }
-            p[talalat_szam++] = adatbazis.esemenyek[i];
-        }
-        if (i == adatbazis.meret - 1) {
-            free(p2);
+            talalatok_tomb[talalat_szam++] = adatbazis.esemenyek[i];
         }
     }
 
-    Esemeny *seged = malloc(talalat_szam * sizeof(Esemeny));
+    Esemeny *seged = (Esemeny *) malloc(talalat_szam * sizeof(Esemeny));
     if (seged == NULL) {
         printf("Hiba tortent a memoria foglalas soran!\n");
     }
-    rendez(p, 0, talalat_szam, seged);
+    rendez(talalatok_tomb, 0, talalat_szam, seged);
     free(seged);
 
     if (talalat_szam > 0) {
@@ -102,16 +94,16 @@ bool rekord_keresese_idoszak_alapjan(Adatbazis adatbazis, Datum kezdo_datum, Dat
         printf("---------------------------------\n");
         for (int i = 0; i < talalat_szam; ++i) {
             printf("%d. esemeny: \n", i + 1);
-            rekord_kiirasa(p[i]);
+            rekord_kiirasa(talalatok_tomb[i]);
             printf("---------------------------------\n");
         }
     } else {
         printf("Nincs talalat.\n");
-        free(p);
+        free(talalatok_tomb);
         return false;
     }
 
-    free(p);
+    free(talalatok_tomb);
     return true;
 }
 
@@ -121,7 +113,6 @@ bool rekord_keresese_idoszak_alapjan(Adatbazis adatbazis, Datum kezdo_datum, Dat
  * @param e2 A masodik esemeny
  * @return Pozitiv, ha e1 kesobbi, negativ ha korabbi, 0 ha egyenloek
  */
-//TODO ahol használtam ezt kijavítani hogy időt is használjon
 int esemenyek_osszehasonlitasa(Esemeny e1, Esemeny e2) {
     int datum_eredmeny = datumok_osszehasonlitasa(e1.datum, e2.datum);
     if (datum_eredmeny != 0) {

@@ -9,7 +9,7 @@
 
 void rekord_kiirasa(Esemeny esemeny);
 
-bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok);
+bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok, int *talalatok_szama);
 
 void rekord_keresese_nap_alapjan(Adatbazis adatbazis);
 

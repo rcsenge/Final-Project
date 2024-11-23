@@ -59,13 +59,12 @@ bool datum_ellenorzo(char datum[]) {
  * @param datum Egy karaktertomb pointere, ahol a beolvasott datum szovege van (elvart formatum: "EEEE-HH-NN")
  *
  * @return Egy Datum strukturat, amely:
- *         - Az ev, honap és nap ertekeit tartalmazza egesz szamkent, ha a bemenet helyes
+ *         - Az ev, honap es nap ertekeit tartalmazza egesz szamkent, ha a bemenet helyes
  *         - {0, 0, 0} erteket tartalmaz, ha a bemenet ervenytelen
  */
 Datum datum_beolvasas(char *datum) {
     if (datum == NULL) {
         printf("Hiba tortent a memoria foglalasa soran!\n");
-        free(datum);
         Datum d = {0, 0, 0};
         return d;
     }
@@ -74,12 +73,11 @@ Datum datum_beolvasas(char *datum) {
     char c;
     while ((c = getchar()) != '\n') {
         datum[hossz] = c;
-        hossz++;
 
-        datum = realloc(datum, (hossz + 1) * sizeof(char));
+        hossz++;
+        datum = (char *) realloc(datum, (hossz + 1) * sizeof(char));
         if (datum == NULL) {
             printf("Hiba tortent a memoria atmeretezese soran!\n");
-            free(datum);
             Datum d = {0, 0, 0};
             return d;
         }
@@ -88,8 +86,9 @@ Datum datum_beolvasas(char *datum) {
 
     if (!datum_ellenorzo(datum)) {
         printf("Helytelen datum formatum!\n");
-        //TODO ezt ellenorizni a fgv hivasnal
-        free(datum);
+        if (datum != NULL) {
+            free(datum);
+        }
         Datum d = {0, 0, 0};
         return d;
     }
@@ -100,7 +99,9 @@ Datum datum_beolvasas(char *datum) {
     substring(datum, ho, 6, 7);
     substring(datum, nap, 10, 11);
 
-    free(datum);
+    if (datum != NULL) {
+        free(datum);
+    }
     int ev_int = atoi(ev);
     int ho_int = atoi(ho);
     int nap_int = atoi(nap);
@@ -173,8 +174,7 @@ Datum datum_hozzaado(Datum d, int nap) {
             d.ho++;
         }
     } else {
-        //TODO atnezni
-        printf("Helytelen nap szamot adtal meg!");
+        printf("Helytelen nap szamot adtal meg!\n");
     }
     return d;
 }

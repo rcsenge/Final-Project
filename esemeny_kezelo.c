@@ -1,5 +1,6 @@
 #include "esemeny_kezelo.h"
 #include "debugmalloc.h"
+#include "datum.h"
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -11,8 +12,8 @@
  */
 void rekord_kiirasa(Esemeny esemeny) {
     printf("Esemeny neve: %s\n", esemeny.nev);
-    printf("Esemeny datuma: %d.%d.%d.\n", esemeny.datum.ev, esemeny.datum.ho, esemeny.datum.nap);
-    printf("Esemeny idopontja: %d:%d\n", esemeny.ido.ora, esemeny.ido.perc);
+    printf("Esemeny datuma: %d.%02d.%02d.\n", esemeny.datum.ev, esemeny.datum.ho, esemeny.datum.nap);
+    printf("Esemeny idopontja: %02d:%02d\n", esemeny.ido.ora, esemeny.ido.perc);
     printf("Esemeny helyszine: %s\n", esemeny.hely);
     printf("Esemenyhez tartozo megjegyzes: %s\n", esemeny.megjegyzes);
 }
@@ -24,10 +25,11 @@ void rekord_kiirasa(Esemeny esemeny) {
  * @param adatbazis Az adatbazis, amiben keresni fogja a megadott nevet
  * @param talalatok Egy pointer pointere, a fuggveny a talalatokra allitja. Ha nincs talalat vagy hiba tortenik, akkor nem kerul modositasra
  *                  A fuggveny hivo feladata a tomb felszabaditasa
+ * @param talalatok_szama A talalatok szamat tarolja, amit a fuggveny beallit
  * @return true, ha a keresesnek van legalabb egy talalata es nem tortent hiba a memoria foglalas kozben
  *         false, ha a keresesnek nincs talalata vagy hiba tortent a memoria foglalas kozben
  */
-bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok) {
+bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok, int *talalatok_szama) {
     char *keresett = (char *) malloc(1 * sizeof(char));
     if (keresett == NULL) {
         printf("Hiba tortent a memoria foglalasa soran!\n");
@@ -40,20 +42,22 @@ bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok) {
         keresett[hossz] = c;
         hossz++;
 
-        keresett = realloc(keresett, (hossz + 1) * sizeof(char));
-        if (keresett == NULL) {
+        char *temp = (char *) realloc(keresett, (hossz + 1) * sizeof(char));
+        if (temp == NULL) {
             printf("Hiba tortent a memoria atmeretezese soran!\n");
+            free(keresett);
             return false;
         }
+        keresett = temp;
     }
     keresett[hossz] = '\0';
+
 
     int kezdeti_max_talalat = 1;
     Esemeny *talalatok_tomb = (Esemeny *) malloc(kezdeti_max_talalat * sizeof(Esemeny));
 
     if (talalatok_tomb == NULL) {
         printf("Hiba tortent a memoria foglalasa soran!\n");
-        free(talalatok);
         return false;
     }
 
@@ -62,11 +66,10 @@ bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok) {
         if (strcmp(adatbazis.esemenyek[i].nev, keresett) == 0) {
             if (talalat_szam >= kezdeti_max_talalat) {
                 kezdeti_max_talalat *= 2;
-                talalatok_tomb = realloc(talalatok, kezdeti_max_talalat * sizeof(Esemeny));
+                talalatok_tomb = (Esemeny *) realloc(talalatok_tomb, kezdeti_max_talalat * sizeof(Esemeny));
 
                 if (talalatok_tomb == NULL) {
                     printf("Hiba tortent a memoria foglalasa soran!\n");
-                    free(talalatok);
                     return false;
                 }
             }
@@ -75,7 +78,6 @@ bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok) {
     }
     free(keresett);
     if (talalat_szam > 0) {
-        *talalatok = talalatok_tomb;
         printf("============Talalatok============\n");
         printf("---------------------------------\n");
         for (int i = 0; i < talalat_szam; ++i) {
@@ -84,11 +86,14 @@ bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok) {
             printf("---------------------------------\n");
         }
     } else {
-        printf("Nincs talalat\n");
+        printf("Nincs talalat.\n");
+        *talalatok = talalatok_tomb;
+        *talalatok_szama = talalat_szam;
         return false;
     }
 
-    free(talalatok_tomb);
+    *talalatok = talalatok_tomb;
+    *talalatok_szama = talalat_szam;
     return true;
 }
 
@@ -97,9 +102,19 @@ bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok) {
  * @param adatbazis Az adatbazis, amely az esemenyeket tartalmazza
  */
 void rekord_keresese_nap_alapjan(Adatbazis adatbazis) {
-    char datum[DATUMHOSSZ];
+    char *datum = (char *) malloc(sizeof(char));
+    if (datum == NULL) {
+        printf("Hiba tortent a memoria foglalasa soran!\n");
+    }
     printf("Add meg a nap datumat: ");
+
     Datum kezdo_datum = datum_beolvasas(datum);
+    Datum ervenytelen = {0, 0, 0};
+    if (datumok_osszehasonlitasa(kezdo_datum, ervenytelen) == 0) {
+        printf("Hiba tortent a datum beolvasasa soran!\n");
+        return;
+    }
+
     Datum veg_datum = kezdo_datum;
     rekord_keresese_idoszak_alapjan(adatbazis, kezdo_datum, veg_datum);
 }
@@ -109,10 +124,15 @@ void rekord_keresese_nap_alapjan(Adatbazis adatbazis) {
  * @param adatbazis Az adatbazis, amely az esemenyeket tartalmazza
  */
 void rekord_keresese_het_alapjan(Adatbazis adatbazis) {
-    char datum[DATUMHOSSZ];
-    //TODO ezt atnezni
+    char *datum = (char *) malloc(sizeof(char));
     printf("Add meg a nap datumat: ");
     Datum kezdo_datum = datum_beolvasas(datum);
+    Datum ervenytelen = {0, 0, 0};
+    if (datumok_osszehasonlitasa(kezdo_datum, ervenytelen) == 0) {
+        printf("Hiba tortent a datum beolvasasa soran!\n");
+        return;
+    }
+
     Datum veg_datum = datum_hozzaado(kezdo_datum, 7);
 
     rekord_keresese_idoszak_alapjan(adatbazis, kezdo_datum, veg_datum);
@@ -123,10 +143,15 @@ void rekord_keresese_het_alapjan(Adatbazis adatbazis) {
  * @param adatbazis Az adatbazis, amely az esemenyeket tartalmazza
  */
 void rekord_keresese_ho_alapjan(Adatbazis adatbazis) {
-    char datum[DATUMHOSSZ];
-    //TODO ezt atnezni
+    char *datum = (char *) malloc(sizeof(char));
     printf("Add meg a honap datumat: ");
     Datum kezdo_datum = datum_beolvasas(datum);
+    Datum ervenytelen = {0, 0, 0};
+    if (datumok_osszehasonlitasa(kezdo_datum, ervenytelen) == 0) {
+        printf("Hiba tortent a datum beolvasasa soran!\n");
+        return;
+    }
+
     Datum veg_datum = datum_hozzaado(kezdo_datum, napok_szama_honapban(kezdo_datum.ho, kezdo_datum.ev));
     rekord_keresese_idoszak_alapjan(adatbazis, kezdo_datum, veg_datum);
 }

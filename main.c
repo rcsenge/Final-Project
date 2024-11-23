@@ -1,20 +1,11 @@
-#include "debugmalloc.h"
 #include "strukturak.h"
+#include "debugmalloc.h"
 #include "esemeny.h"
 #include "esemeny_kezelo.h"
 #include "adatbazis.h"
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-//TODO olvashatobb valtozo nevek
-//TODO modulokra bontas
-//TODO malloc, realloc ellenorzesek
-//TODO reszletesebb dokumentacio
-//TODO teszteles
 
 bool menu(Adatbazis *adatbazis);
 
@@ -49,37 +40,81 @@ bool menu(Adatbazis *adatbazis) {
     printf("8. Kilepes\n");
 
     printf("Adj meg egy menupontot: ");
-    scanf("%d", &opcio);
+    if (scanf("%d", &opcio) < 1) {
+        printf("Sikertelen volt a beolvasas!\n");
+        return false;
+    }
     getchar();
+    printf("---------------------------------\n");
 
     switch (opcio) {
-        case 1:
-            rekord_hozzaadasa(adatbazis);
+        case 1: {
+            bool sikeres_hozzaadas = rekord_hozzaadasa(adatbazis);
+            if (sikeres_hozzaadas == false) {
+                printf("Sikertelen volt az uj rekord hozzaadasa!\n");
+            }
             break;
-        case 2:
-            rekord_torlese(adatbazis);
+        }
+        case 2: {
+            bool sikeres_torles = rekord_torlese(adatbazis);
+            if (sikeres_torles == false) {
+                printf("Sikertelen volt a rekord torlese!\n");
+            }
             break;
-        case 3:
-            rekord_modositasa(adatbazis);
+        }
+        case 3: {
+            bool sikeres_modositas = rekord_modositasa(adatbazis);
+            if (sikeres_modositas == false) {
+                printf("Sikertelen volt a rekord modositasa!\n");
+            }
             break;
-        case 4:
-            adatbazis_kilistazasa(adatbazis);
+        }
+        case 4: {
+            bool sikeres_kilistazas = adatbazis_kilistazasa(adatbazis);
+            if (sikeres_kilistazas == false) {
+                printf("Sikertelen volt a rekordok kiiratasa!\n");
+            }
             break;
-        case 5:
-            rekord_keresese_nev_alapjan(*adatbazis, NULL);
-            break;
+        }
+        case 5: {
+            Esemeny *talalatok = NULL;
+            int *talalatok_szama = (int *) malloc(sizeof(int));
 
-        case 6:
-            adatbazis_fajlba_irasa(*adatbazis);
+            printf("Add meg a keresett nevet: ");
+            bool sikeres_kereses = rekord_keresese_nev_alapjan(*adatbazis, &talalatok, talalatok_szama);
+
+            free(talalatok);
+            free(talalatok_szama);
+
+            if (sikeres_kereses == false) {
+                printf("Sikertelen volt a rekord keresese!\n");
+            }
+
             break;
-        case 7:
-            if (adatbazis == NULL) {
-                adatbazis_beolvasasa_fajlbol(adatbazis);
+        }
+        case 6: {
+            bool sikeres_fajlba_iras = adatbazis_fajlba_irasa(*adatbazis);
+            if (sikeres_fajlba_iras == false) {
+                printf("Sikertelen volt az adatbazis fajlba irasa!\n");
+            }
+            break;
+        }
+        case 7: {
+            if (adatbazis->esemenyek == NULL) {
+                bool sikeres_adatbazis_beolvasas = adatbazis_beolvasasa_fajlbol(&adatbazis);
+                if (sikeres_adatbazis_beolvasas == false) {
+                    printf("Sikertelen volt az adatbazis beolvasasa!\n");
+                } else {
+                    printf("Sikeres volt az adatbazis beolvasasa!\n");
+                    for (int i = 0; i < adatbazis->meret; ++i) {
+                        rekord_kiirasa(adatbazis->esemenyek[i]);
+                    }
+                }
             } else {
-                //TODO ezt dokumentacioban is leirni
                 printf("Ezt csak a program elso lepesekent teheted meg!\n");
             }
             break;
+        }
         case 8:
             return false;
         default:
