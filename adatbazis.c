@@ -44,25 +44,26 @@ bool adatbazis_fajlba_irasa(Adatbazis adatbazis) {
         return false;
     }
 
-    FILE *file = fopen(fajl_nev, "w");
-    if (file == NULL) {
+    FILE *fajl = fopen(fajl_nev, "w");
+    if (fajl == NULL) {
         printf("Sikertelen volt a file megnyitasa!\n");
         return false;
     }
 
-    fprintf(file, "---------------------------------\n");
+    fprintf(fajl, "---------------------------------\n");
     for (int i = 0; i < adatbazis.meret; ++i) {
         Esemeny esemeny = adatbazis.esemenyek[i];
-        fprintf(file, "%d. esemeny: \n", i + 1);
-        fprintf(file, "Esemeny neve: %s\n", esemeny.nev);
-        fprintf(file, "Esemeny datuma: %d. %02d. %02d.\n", esemeny.datum.ev, esemeny.datum.ho, esemeny.datum.nap);
-        fprintf(file, "Esemeny idopontja: %02d:%02d\n", esemeny.ido.ora, esemeny.ido.perc);
-        fprintf(file, "Esemeny helyszine: %s\n", esemeny.hely);
-        fprintf(file, "Esemenyhez tartozo megjegyzes: %s\n", esemeny.megjegyzes);
-        fprintf(file, "---------------------------------\n");
+        fprintf(fajl, "%d. esemeny: \n", i + 1);
+        fprintf(fajl, "Esemeny neve: %s\n", esemeny.nev);
+        fprintf(fajl, "Esemeny datuma: %d. %02d. %02d.\n", esemeny.datum.ev, esemeny.datum.ho, esemeny.datum.nap);
+        fprintf(fajl, "Esemeny idopontja: %02d:%02d\n", esemeny.ido.ora, esemeny.ido.perc);
+        fprintf(fajl, "Esemeny helyszine: %s\n", esemeny.hely);
+        fprintf(fajl, "Esemenyhez tartozo megjegyzes: %s\n", esemeny.megjegyzes);
+        fprintf(fajl, "---------------------------------\n");
     }
 
-    fclose(file);
+    fclose(fajl);
+    free(fajl_nev);
     printf("Sikeresen megtortent a fajlba iras!\n");
     return true;
 }

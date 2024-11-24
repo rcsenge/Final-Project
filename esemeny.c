@@ -17,21 +17,26 @@ bool rekord_hozzaadasa(Adatbazis *adatbazis) {
 
     bool sikeres_datum = uj_datum(&esemeny);
     if (sikeres_datum == false) {
+        free(esemeny.nev);
         return false;
     }
 
     bool sikeres_ido = uj_ido(&esemeny);
     if (sikeres_ido == false) {
+        free(esemeny.nev);
         return false;
     }
 
     bool sikeres_hely = uj_hely(&esemeny);
     if (sikeres_hely == false) {
+        free(esemeny.nev);
         return false;
     }
 
     bool sikeres_megjegyzes = uj_megjegyzes(&esemeny);
     if (sikeres_megjegyzes == false) {
+        free(esemeny.nev);
+        free(esemeny.hely);
         return false;
     }
     adatbazis->esemenyek = (Esemeny *) realloc(adatbazis->esemenyek, (adatbazis->meret + 1) * sizeof(Esemeny));
@@ -64,9 +69,9 @@ bool rekord_torlese(Adatbazis *adatbazis) {
     bool sikeres_talalat = rekord_keresese_nev_alapjan(*adatbazis, &talalatok, talalatok_szama);
 
     if (sikeres_talalat == false) {
-        return false;
         free(talalatok);
         free(talalatok_szama);
+        return false;
     }
 
     printf("Hanyadik sorszamu esemenyt szeretned torolni? ");
@@ -276,7 +281,8 @@ bool uj_nev(Esemeny *esemeny) {
         }
     }
     nev[hossz] = '\0';
-    esemeny->nev = (char *) malloc((strlen(nev) + 1) * sizeof(char));
+
+    /*esemeny->nev = (char *) malloc((strlen(nev) + 1) * sizeof(char));
     if (esemeny->nev == NULL) {
         printf("Hiba tortent a memoria foglalasa soran!\n");
         free(nev);
@@ -285,6 +291,8 @@ bool uj_nev(Esemeny *esemeny) {
 
     strcpy(esemeny->nev, nev);
     free(nev);
+    */
+    esemeny->nev = nev;
     return true;
 }
 
@@ -314,6 +322,7 @@ bool uj_datum(Esemeny *esemeny) {
  */
 bool uj_ido(Esemeny *esemeny) {
     char *ido = (char *) malloc(1 * sizeof(char));
+
     if (ido == NULL) {
         printf("Hiba tortent a memoria foglalasa soran!\n");
         return false;
@@ -337,6 +346,7 @@ bool uj_ido(Esemeny *esemeny) {
 
     if (!ido_ellenorzo(ido)) {
         printf("Helytelen az idopont bemenete\n");
+        free(ido);
         return false;
     }
 

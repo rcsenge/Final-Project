@@ -86,9 +86,9 @@ bool rekord_keresese_nev_alapjan(Adatbazis adatbazis, Esemeny **talalatok, int *
             printf("---------------------------------\n");
         }
     } else {
-        printf("Nincs talalat.\n");
-        *talalatok = talalatok_tomb;
-        *talalatok_szama = talalat_szam;
+        free(talalatok_tomb);
+        *talalatok = NULL;
+        *talalatok_szama = 0;
         return false;
     }
 

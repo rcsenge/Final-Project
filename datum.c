@@ -65,8 +65,7 @@ bool datum_ellenorzo(char datum[]) {
 Datum datum_beolvasas(char *datum) {
     if (datum == NULL) {
         printf("Hiba tortent a memoria foglalasa soran!\n");
-        Datum d = {0, 0, 0};
-        return d;
+        return (Datum){0, 0, 0};
     }
 
     int hossz = 0;
@@ -78,19 +77,16 @@ Datum datum_beolvasas(char *datum) {
         datum = (char *) realloc(datum, (hossz + 1) * sizeof(char));
         if (datum == NULL) {
             printf("Hiba tortent a memoria atmeretezese soran!\n");
-            Datum d = {0, 0, 0};
-            return d;
+            free(datum);
+            return (Datum){0, 0, 0};
         }
     }
     datum[hossz] = '\0';
 
     if (!datum_ellenorzo(datum)) {
         printf("Helytelen datum formatum!\n");
-        if (datum != NULL) {
-            free(datum);
-        }
-        Datum d = {0, 0, 0};
-        return d;
+        free(datum);
+        return (Datum){0, 0, 0};
     }
 
     char ev[5], ho[3], nap[3];
@@ -99,15 +95,13 @@ Datum datum_beolvasas(char *datum) {
     substring(datum, ho, 6, 7);
     substring(datum, nap, 10, 11);
 
-    if (datum != NULL) {
-        free(datum);
-    }
+    free(datum);
+
     int ev_int = atoi(ev);
     int ho_int = atoi(ho);
     int nap_int = atoi(nap);
 
-    Datum d = {ev_int, ho_int, nap_int};
-    return d;
+    return (Datum){ev_int, ho_int, nap_int};
 }
 
 /**
