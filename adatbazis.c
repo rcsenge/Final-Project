@@ -53,12 +53,12 @@ bool adatbazis_fajlba_irasa(Adatbazis adatbazis) {
     fprintf(fajl, "---------------------------------\n");
     for (int i = 0; i < adatbazis.meret; ++i) {
         Esemeny esemeny = adatbazis.esemenyek[i];
-        fprintf(fajl, "%d. esemeny: \n", i + 1);
-        fprintf(fajl, "Esemeny neve: %s\n", esemeny.nev);
-        fprintf(fajl, "Esemeny datuma: %d. %02d. %02d.\n", esemeny.datum.ev, esemeny.datum.ho, esemeny.datum.nap);
-        fprintf(fajl, "Esemeny idopontja: %02d:%02d\n", esemeny.ido.ora, esemeny.ido.perc);
-        fprintf(fajl, "Esemeny helyszine: %s\n", esemeny.hely);
-        fprintf(fajl, "Esemenyhez tartozo megjegyzes: %s\n", esemeny.megjegyzes);
+        fprintf(fajl, "%d. esemeny:\n", i + 1);
+        fprintf(fajl, "Esemeny neve:%s\n", esemeny.nev);
+        fprintf(fajl, "Esemeny datuma:%d. %02d. %02d.\n", esemeny.datum.ev, esemeny.datum.ho, esemeny.datum.nap);
+        fprintf(fajl, "Esemeny idopontja:%02d:%02d\n", esemeny.ido.ora, esemeny.ido.perc);
+        fprintf(fajl, "Esemeny helyszine:%s\n", esemeny.hely);
+        fprintf(fajl, "Esemenyhez tartozo megjegyzes:%s\n", esemeny.megjegyzes);
         fprintf(fajl, "---------------------------------\n");
     }
 
@@ -180,97 +180,89 @@ bool adatbazis_beolvasasa_fajlbol(Adatbazis **adatbazis) {
         Esemeny *uj_esemeny = &temp_esemenyek[temp_esemenyek_meret - 1];
 
         if (strncmp(sor, "Esemeny neve:", 13) == 0) {
-            char temp[256];
+            char *nev;
+            nev = strtok(sor, ":");
+            nev = strtok(NULL, "\n");
 
-            if (sscanf(sor + 13, " %[^\n]", temp) == 1) {
-                uj_esemeny->nev = (char *) malloc(strlen(temp) + 1);
+            uj_esemeny->nev = (char *) malloc(strlen(sor) + 1);
 
-                if (uj_esemeny->nev == NULL) {
-                    printf("Sikertelen volt a memoria lefoglalasa!\n");
-                    fclose(fajl);
-                    free(fajl_nev);
-                    return false;
-                }
-                strcpy(uj_esemeny->nev, temp);
-            } else {
-                printf("Nem sikerult beolvasni az esemeny nevet!\n");
+            if (uj_esemeny->nev == NULL) {
+                printf("Sikertelen volt a memoria lefoglalasa!\n");
                 fclose(fajl);
                 free(fajl_nev);
                 return false;
             }
+            strcpy(uj_esemeny->nev, nev);
         } else if (strncmp(sor, "Esemeny datuma:", 15) == 0) {
-            char d[DATUMHOSSZ];
+            char *datum;
+            datum = strtok(sor, ":");
+            datum = strtok(NULL, "\n");
 
-            sscanf(sor + 15, " %[^\n]", d);
-            if (!datum_ellenorzo(d)) {
+            if (!datum_ellenorzo(datum)) {
                 printf("Helytelen datum formatum!\n");
                 fclose(fajl);
                 free(fajl_nev);
                 return false;
             }
             char ev[5], ho[3], nap[3];
-            substring(d, ev, 0, 3);
-            substring(d, ho, 6, 7);
-            substring(d, nap, 10, 11);
+
+            substring(datum, ev, 0, 3);
+            substring(datum, ho, 6, 7);
+            substring(datum, nap, 10, 11);
+
             uj_esemeny->datum.ev = atoi(ev);
             uj_esemeny->datum.ho = atoi(ho);
             uj_esemeny->datum.nap = atoi(nap);
         } else if (strncmp(sor, "Esemeny idopontja:", 18) == 0) {
-            char i[6];
-            sscanf(sor + 18, " %[^\n]", i);
-            if (!ido_ellenorzo(i)) {
+            char *ido;
+            ido = strtok(sor, ":");
+            ido = strtok(NULL, "\n");
+
+            if (!ido_ellenorzo(ido)) {
                 printf("Helytelen az idopont bemenete\n");
                 fclose(fajl);
                 free(fajl_nev);
                 return false;
             }
             char ora[3], perc[3];
-            substring(i, ora, 0, 1);
-            substring(i, perc, 3, 4);
+            substring(ido, ora, 0, 1);
+            substring(ido, perc, 3, 4);
+
             uj_esemeny->ido.ora = atoi(ora);
             uj_esemeny->ido.perc = atoi(perc);
         } else if (strncmp(sor, "Esemeny helyszine:", 18) == 0) {
-            char temp[256];
+            char *hely;
+            hely = strtok(sor, ":");
+            hely = strtok(NULL, "\n");
 
-            if (sscanf(sor + 18, " %[^\n]", temp) == 1) {
-                uj_esemeny->hely = (char *) malloc(strlen(temp) + 1);
+            uj_esemeny->hely = (char *) malloc(strlen(sor) + 1);
 
-                if (uj_esemeny->hely == NULL) {
-                    printf("Sikertelen volt a memoria lefoglalasa!\n");
-                    fclose(fajl);
-                    free(fajl_nev);
-                    return false;
-                }
-                strcpy(uj_esemeny->hely, temp);
-            } else {
-                printf("Nem sikerult beolvasni az esemeny helyszinet!\n");
+            if (uj_esemeny->hely == NULL) {
+                printf("Sikertelen volt a memoria lefoglalasa!\n");
                 fclose(fajl);
                 free(fajl_nev);
                 return false;
             }
+            strcpy(uj_esemeny->hely, hely);
         } else if (strncmp(sor, "Esemenyhez tartozo megjegyzes:", 30) == 0) {
-            char temp[256];
+            char *megjegyzes;
+            megjegyzes = strtok(sor, ":");
+            megjegyzes = strtok(NULL, "\n");
 
-            if (sscanf(sor + 30, " %[^\n]", temp) == 1) {
-                uj_esemeny->megjegyzes = (char *) malloc(strlen(temp) + 1);
+            uj_esemeny->megjegyzes = (char *) malloc(strlen(sor) + 1);
 
-                if (uj_esemeny->megjegyzes == NULL) {
-                    printf("Sikertelen volt a memoria lefoglalasa!\n");
-                    fclose(fajl);
-                    free(fajl_nev);
-                    return false;
-                }
-                strcpy(uj_esemeny->megjegyzes, temp);
-            } else {
-                printf("Nem sikerult beolvasni az esemeny megjegyzeset!\n");
+            if (uj_esemeny->megjegyzes == NULL) {
+                printf("Sikertelen volt a memoria lefoglalasa!\n");
                 fclose(fajl);
                 free(fajl_nev);
                 return false;
             }
+            strcpy(uj_esemeny->megjegyzes, megjegyzes);
         }
     }
 
     fclose(fajl);
+
     free(fajl_nev);
 
     (*adatbazis)->esemenyek = temp_esemenyek;
