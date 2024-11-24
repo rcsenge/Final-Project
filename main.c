@@ -106,9 +106,6 @@ bool menu(Adatbazis *adatbazis) {
                     printf("Sikertelen volt az adatbazis beolvasasa!\n");
                 } else {
                     printf("Sikeres volt az adatbazis beolvasasa!\n");
-                    for (int i = 0; i < adatbazis->meret; ++i) {
-                        rekord_kiirasa(adatbazis->esemenyek[i]);
-                    }
                 }
             } else {
                 printf("Ezt csak a program elso lepesekent teheted meg!\n");

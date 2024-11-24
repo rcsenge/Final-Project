@@ -112,7 +112,7 @@ bool adatbazis_kilistazasa(const Adatbazis *adatbazis) {
 
 
 /**
- * Az adatbazist .txt fajlbol beolvassa. Ezt a fuggvenyt a program elso menu felsorolassa utan lehet csak valasztani.
+ * Az adatbazist a megadott .txt fajlbol beolvassa. Ezt a fuggvenyt a program elso menu felsorolasa utan lehet csak valasztani.
  * @param adatbazis Az adatbazis, ahova beolvassa az adatokat
  * @return true, ha sikeres, kulonben false
  */
@@ -181,6 +181,7 @@ bool adatbazis_beolvasasa_fajlbol(Adatbazis **adatbazis) {
 
         if (strncmp(sor, "Esemeny neve:", 13) == 0) {
             char *nev;
+            // forras: https://stackoverflow.com/questions/19555434/how-to-extract-a-substring-from-a-string-in-c
             nev = strtok(sor, ":");
             nev = strtok(NULL, "\n");
 

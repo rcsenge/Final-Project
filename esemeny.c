@@ -282,16 +282,6 @@ bool uj_nev(Esemeny *esemeny) {
     }
     nev[hossz] = '\0';
 
-    /*esemeny->nev = (char *) malloc((strlen(nev) + 1) * sizeof(char));
-    if (esemeny->nev == NULL) {
-        printf("Hiba tortent a memoria foglalasa soran!\n");
-        free(nev);
-        return false;
-    }
-
-    strcpy(esemeny->nev, nev);
-    free(nev);
-    */
     esemeny->nev = nev;
     return true;
 }
